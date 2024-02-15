@@ -1,6 +1,8 @@
 package hello.thymeleaf.basic;
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -52,9 +54,14 @@ public class BasicController {
         return "basic/variable";
     }
 
+    // springBoot 3.x.x  부터는 thymeleaf의 #request #response 등을 제공하지 않는다
     @GetMapping("/basic-objects")
-    public String basicObjects(HttpSession session) {
+    public String basicObjects(HttpSession session, HttpServletRequest request, HttpServletResponse response,
+                               Model model) {
         session.setAttribute("sessionData", "Hello Session");
+        model.addAttribute("request",request);
+        model.addAttribute("response",response);
+        model.addAttribute("servletContext",request.getServletContext());
         return "basic/basic-objects";
     }
 
